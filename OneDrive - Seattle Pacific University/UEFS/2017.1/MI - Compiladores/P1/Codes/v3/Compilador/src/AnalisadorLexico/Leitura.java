@@ -34,9 +34,9 @@ public class Leitura {
     /* --------------------------------------------------------------------------------------------
      * O método abaixo carrega o arquivo a ser analisado e chama os métodos que carregam as listas.
      */
-    public void fazerLeitura(String diretorio) throws FileNotFoundException, IOException {
+    public void fazerLeitura(File arquivo) throws FileNotFoundException, IOException {
         tokens = new ArrayList<Token>();
-        arquivo = new File(diretorio);
+        
         Scanner ler;
         ler = new Scanner(new FileReader(arquivo));
         while (ler.hasNextLine()) {
