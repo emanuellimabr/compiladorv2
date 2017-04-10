@@ -36,7 +36,7 @@ public class Leitura {
      */
     public void fazerLeitura(File arquivo) throws FileNotFoundException, IOException {
         tokens = new ArrayList<Token>();
-        
+
         Scanner ler;
         ler = new Scanner(new FileReader(arquivo));
         while (ler.hasNextLine()) {
@@ -95,7 +95,18 @@ public class Leitura {
                         int aux3 = j;
                         j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, tokens);
                         if (aux3 == j) {
-                            j = comparacao.verificarDelimitadorCometarios(j, caractere, i, tokens);
+                            int verif = j + 1;
+                            if (caractere[verif] == '/') {
+                                j = comparacao.verificaDelimitadorComentarioLinha(j, caractere, i, tokens);
+                            } else if (caractere[verif] == '*') {
+                                String comentario = "";
+                                int[] p = comparacao.verificaDelimitadorComentarioBloco(linha, i, caractere, j, tokens, entrada, j);
+                                i = p[0];
+                                j = p[1];
+                                System.out.println(p[0] + "Linha " + p[1] + "Posicao j");
+                                caractere = linha[i].toCharArray();
+                            }
+
                         } else {
                             j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, tokens);
                         }
@@ -112,17 +123,17 @@ public class Leitura {
                     }
                 } else if (operadoresLogicos.contains("" + caractere[j])) {
                     j = comparacao.verificarOperadoresLogicos(j, caractere, operadoresLogicos, i, tokens);
-                } else if (delimitadores.contains("" + caractere[j])){
+                } else if (delimitadores.contains("" + caractere[j])) {
                     j = comparacao.verificarDelimitadores(j, caractere, i, delimitadores, tokens);
-                } else if(caractere[j] == '"'){
+                } else if (caractere[j] == '"') {
                     j = comparacao.verificarCadeiaCaracteres(j, caractere, letras, digitos, simbolos, i, tokens);
-                }else if (caractere[j] == '\''){
+                } else if (caractere[j] == '\'') {
                     j = comparacao.verificarCaractere(j, caractere, i, letras, digitos, tokens);
                 } else {
-                    if(caractere[j] != ' ' && caractere[j] != '\t'){
-                        Token token = new Token("Não Pertence à Linguagem", caractere[j]+"");
+                    if (caractere[j] != ' ' && caractere[j] != '\t') {
+                        Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
                         tokens.add(token);
-                        token.setLinha(i+1);
+                        token.setLinha(i + 1);
                     }
 
                     j++;//incrementa os caracteres

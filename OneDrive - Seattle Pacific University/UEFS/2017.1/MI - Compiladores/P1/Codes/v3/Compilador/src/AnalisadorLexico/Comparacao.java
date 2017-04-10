@@ -349,45 +349,9 @@ public class Comparacao {
     }
 
 //_________________________________________________________________________________________________________________     
-   /* public int verificaDelimitadorComentarioLinha(int j, char[] caractere, int linha, List<Token> tokens){
-     int J = j;
-     boolean encontrou = false;
-     String palavra = "";
-     if (caractere[J] == '/') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     if (caractere[J] == '/') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     while (J < caractere.length) {
-     if (caractere[J] == '\n') {
-     palavra = palavra + caractere[J];
-     encontrou = true;
-     J = J + 1;
-     break;
-     } else {
-     palavra = palavra + caractere[J];
-     J++;
-     }
-     }
-     }
-     }
-     palavra = palavra + caractere[J];
-     Token token = new Token("Comentário de Linha", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     return J;         
-     }
-    
-     //_________________________________________________________________________________________________________________     
-     public int verificaDelimitadorComentarioBloco(){
-     return 0;
-     }*/
-//_________________________________________________________________________________________________________________     
-    public int verificarDelimitadorCometarios(int j, char[] caractere, int linha, List<Token> tokens) {
+    public int verificaDelimitadorComentarioLinha(int j, char[] caractere, int linha, List<Token> tokens) {
         int J = j;
-        boolean encontrouLinha = false;
-        boolean encontrouBloco = false;
+        boolean encontrou = false;
         String palavra = "";
         if (caractere[J] == '/') {
             palavra = palavra + caractere[J];
@@ -398,7 +362,7 @@ public class Comparacao {
                 while (J < caractere.length) {
                     if (caractere[J] == '\n') {
                         palavra = palavra + caractere[J];
-                        encontrouLinha = true;
+                        encontrou = true;
                         J = J + 1;
                         break;
                     } else {
@@ -406,54 +370,141 @@ public class Comparacao {
                         J++;
                     }
                 }
-            } else if (caractere[J] == '*') {
-                palavra = palavra + caractere[J];
-                J = J + 1;
-                while (J < caractere.length) {
-                    if (caractere[J] == '*') {
-                        palavra = palavra + caractere[J];
-                        J = J + 1;
-                        if (caractere[J] == '/') {
-                            palavra = palavra + caractere[J];
-                            encontrouBloco = true;
-                            J = J + 1;
-                            break;
-                        } else { // Comentário mal formado
-                            palavra = palavra + caractere[J];
-                            Token token = new Token("Comentário Mal Formado", palavra);
-                            token.setLinha(linha + 1);
-                            tokens.add(token);
-                            break;
-                            //preciso ver o que retorno em caso de comentário mal formado 
-                        }
-                    } else {
-                        palavra = palavra + caractere[J];
-                        J++;
-                    }
-                }
-            }
-            if (encontrouLinha == true) {
-                palavra = palavra + caractere[J];
-                Token token = new Token("Comentário de Linha", palavra);
-                token.setLinha(linha + 1);
-                tokens.add(token);
-                return J;
-            }
-
-            if (encontrouBloco == true) {
-                palavra = palavra + caractere[J];
-                Token token = new Token("Comentário de Bloco", palavra);
-                token.setLinha(linha + 1);
-                tokens.add(token);
-                return J;
             }
         }
         palavra = palavra + caractere[J];
-        Token token = new Token("Comentário Mal Formado", palavra);
+        Token token = new Token("Comentário de Linha", palavra);
         token.setLinha(linha + 1);
         tokens.add(token);
-        return J;    //preciso ver o que retorno em caso de comentário mal formado 
+        return J;
     }
+
+//_________________________________________________________________________________________________________________     
+    public int[] verificaDelimitadorComentarioBloco(String[] Linhas, int linha, char[] caractere, int j, List<Token> tokens, String comentario, int x) {
+        int J = j;
+        int[] p = {linha,j};
+        if(linha>=Linhas.length){
+            p[0] = linha-1;
+            p[1] = Linhas[p[0]].length();
+            Token token = new Token("Comentário de Bloco Não Fechado", comentario);
+            token.setLinha(linha-1);
+            tokens.add(token);
+            return p;      
+        }
+        
+        boolean encontrou=false;   
+        while(J < caractere.length){
+            
+            if(caractere[J] == '*'){
+                comentario = comentario+caractere[J];
+                J++;
+                if(J < caractere.length && caractere[J] == '/'){
+                    comentario = comentario+caractere[J];
+                    encontrou = true;
+                    p[0] = J;
+                    p[1] = j;
+                    break;
+                }   
+            }
+            else{
+                comentario = comentario+caractere[J];
+                J++;
+            }
+        }
+        
+        if(!encontrou){
+            j=0;
+            if (linha+1>=Linhas.length) {
+                p[0] = linha;
+                p[1] = Linhas[p[0]].length();
+                Token token = new Token("Comentário de Bloco Não Fechado", comentario);
+                token.setLinha(linha);
+                tokens.add(token);
+                return p;
+                
+            }
+            caractere =Linhas[linha+1].toCharArray();
+            p = verificaDelimitadorComentarioBloco(Linhas, linha+1, caractere, j, tokens, comentario+" ", x);
+        }else{
+        p[0] = linha;
+        p[1] = J+1;
+        Token token = new Token("Comentário de Bloco", comentario);
+        token.setLinha(x + 1);
+        tokens.add(token);
+        }     
+        return p;
+    }
+//_________________________________________________________________________________________________________________     
+/*    public int verificarDelimitadorCometarios(int j, char[] caractere, int linha, List<Token> tokens) {
+     int J = j;
+     boolean encontrouLinha = false;
+     boolean encontrouBloco = false;
+     String palavra = "";
+     if (caractere[J] == '/') {
+     palavra = palavra + caractere[J];
+     J = J + 1;
+     if (caractere[J] == '/') {
+     palavra = palavra + caractere[J];
+     J = J + 1;
+     while (J < caractere.length) {
+     if (caractere[J] == '\n') {
+     palavra = palavra + caractere[J];
+     encontrouLinha = true;
+     J = J + 1;
+     break;
+     } else {
+     palavra = palavra + caractere[J];
+     J++;
+     }
+     }
+     } else if (caractere[J] == '*') {
+     palavra = palavra + caractere[J];
+     J = J + 1;
+     while (J < caractere.length) {
+     if (caractere[J] == '*') {
+     palavra = palavra + caractere[J];
+     J = J + 1;
+     if (caractere[J] == '/') {
+     palavra = palavra + caractere[J];
+     encontrouBloco = true;
+     J = J + 1;
+     break;
+     } else { // Comentário mal formado
+     palavra = palavra + caractere[J];
+     Token token = new Token("Comentário Mal Formado", palavra);
+     token.setLinha(linha + 1);
+     tokens.add(token);
+     break;
+     //preciso ver o que retorno em caso de comentário mal formado 
+     }
+     } else {
+     palavra = palavra + caractere[J];
+     J++;
+     }
+     }
+     }
+     if (encontrouLinha == true) {
+     palavra = palavra + caractere[J];
+     Token token = new Token("Comentário de Linha", palavra);
+     token.setLinha(linha + 1);
+     tokens.add(token);
+     return J;
+     }
+
+     if (encontrouBloco == true) {
+     palavra = palavra + caractere[J];
+     Token token = new Token("Comentário de Bloco", palavra);
+     token.setLinha(linha + 1);
+     tokens.add(token);
+     return J;
+     }
+     }
+     palavra = palavra + caractere[J];
+     Token token = new Token("Comentário Mal Formado", palavra);
+     token.setLinha(linha + 1);
+     tokens.add(token);
+     return J;    //preciso ver o que retorno em caso de comentário mal formado 
+     }*/
 
 //_________________________________________________________________________________________________________________    
     public int verificarDelimitadores(int j, char[] caractere, int linha, List<String> delimitadores, List<Token> tokens) {
