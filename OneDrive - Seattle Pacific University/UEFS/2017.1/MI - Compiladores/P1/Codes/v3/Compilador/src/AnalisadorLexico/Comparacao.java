@@ -24,6 +24,7 @@ public class Comparacao {
             }
         }
         if (palavrasReservadas.contains(palavra)) {
+            //System.out.println(palavra);
             Token token = new Token("Palavra Reservada", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
@@ -34,18 +35,21 @@ public class Comparacao {
     }
 //_________________________________________________________________________________________________________________
 
-    public int verificarIdentificador(int j, char[] caractere, List<String> letras, List<String> digitos, int linha, List<Token> tokens) {
+    public int verificarIdentificador(int j, char[] caractere, List<String> letras, List<String> delimitadores, List<String> digitos, int linha, List<Token> tokens) {
         String palavra = "";
         boolean erro = false;
         int J = j;
         if (letras.contains(caractere[J] + "")) {
             palavra = palavra + caractere[J];
             J = J + 1;
-            //System.out.println(caractere[J]);
+            //System.out.println(palavra);
             while (J < caractere.length) {
                 if (letras.contains(caractere[J] + "") || digitos.contains(caractere[J] + "") || caractere[J] == '_') {
                     palavra = palavra + caractere[J];
                     J++;
+                    //System.out.println(palavra);
+                } else if (caractere[J] == ' ' ) {
+                    break;
                 } else {
                     palavra = palavra + caractere[J];
                     erro = true;
@@ -58,9 +62,8 @@ public class Comparacao {
             Token token = new Token("Identificador Mal Formado", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
-            return J;
+            return J + 1;
         }
-
         //System.out.println(palavra);
         Token token = new Token("Identificador", palavra);
         token.setLinha(linha + 1);
@@ -69,7 +72,7 @@ public class Comparacao {
     }
 
 //_________________________________________________________________________________________________________________    
-    public int verificarNumero(int j, char[] caractere, List<String> digitos, int linha, List<Token> tokens) {
+    public int verificarNumero(int j, char[] caractere, List<String> digitos, List<String> delimitadores, int linha, List<Token> tokens) {
         String palavra = "";
         boolean erro = false;
         int J = j;
@@ -84,6 +87,8 @@ public class Comparacao {
                 } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                     palavra = palavra + caractere[J];
                     J++;
+                } else if (caractere[J] == ' ') {
+                    break;
                 } else {
                     palavra = palavra + caractere[J];
                     erro = true;
@@ -95,7 +100,7 @@ public class Comparacao {
             J = J + 1;
             while (J < caractere.length) {
                 if (caractere[J] == ' ') {
-                    palavra = palavra + caractere[J];//se for ora desprezar os espaços comento essa linha.
+                    palavra = palavra + caractere[J];//se for pra desprezar os espaços comento essa linha.
                     J++;
                 } else if (digitos.contains(caractere[J] + "")) {
                     palavra = palavra + caractere[J];
@@ -107,6 +112,8 @@ public class Comparacao {
                         } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                             palavra = palavra + caractere[J];
                             J++;
+                        } else if (caractere[J] == ' ') {
+                            break;
                         } else {
                             palavra = palavra + caractere[J];
                             erro = true;
@@ -124,7 +131,7 @@ public class Comparacao {
             Token token = new Token("Número Mal Formado", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
-            return J;
+            return J + 1;
         }
         //System.out.println(palavra);
         Token token = new Token("Número", palavra);
@@ -134,25 +141,28 @@ public class Comparacao {
     }
 
 //_________________________________________________________________________________________________________________
-    public int verificarOperadoresAritmeticos(int j, char[] caractere, int linha, List<Token> tokens) {
+    public int verificarOperadoresAritmeticos(int j, char[] caractere, int linha, List<String> operadoresAritmeticos, List<Token> tokens) {
         String palavra = "";
         int J = j;
-        if (caractere[J] == '+' || caractere[J] == '-' || caractere[J] == '*' || caractere[J] == '%') {
-            palavra = palavra + caractere[J];
-            Token token = new Token("Operadores Aritméticos", palavra);
-            token.setLinha(linha + 1);
-            tokens.add(token);
-            J = J + 1;
-        } else if (caractere[J] == '/') {
-            palavra = palavra + caractere[J];
-            J = J + 1;
-            if (caractere[J] == '/' || caractere[J] == '*') {
-                return j; //retorna para verificar se é comentário
+        if (operadoresAritmeticos.contains(caractere[J] + "")) {
+            if (caractere[J] == '/') {
+                palavra = palavra + caractere[J];
+                J = J + 1;
+                if (caractere[J] == '/' || caractere[J] == '*') {
+                    return j; //retorna para verificar se é comentário
+                } else {
+                    //System.out.println(palavra);
+                    Token token = new Token("Operadores Aritméticos", palavra);
+                    token.setLinha(linha + 1);
+                    tokens.add(token);
+                    return J;
+                }
             } else {
+                //System.out.println(palavra);
                 Token token = new Token("Operadores Aritméticos", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
-                return J;
+                J = J + 1;
             }
         }
         return J;
@@ -270,6 +280,7 @@ public class Comparacao {
         String palavra = "";
         int J = j;
         if (caractere[J] == '!') {
+            palavra = palavra + caractere[J];
             Token token = new Token("Operadores Lógicos", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
@@ -295,7 +306,7 @@ public class Comparacao {
                         J = J + 1;
                     } else {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadore Lógico Mal Formado", palavra);
+                        Token token = new Token("Operador Lógico Mal Formado", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -304,7 +315,7 @@ public class Comparacao {
                 }
             } else { //má formação de operador.
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadore Lógico Mal Formado", palavra);
+                Token token = new Token("Operador Lógico Mal Formado", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -330,7 +341,7 @@ public class Comparacao {
                         J = J + 1;
                     } else {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadore Lógico Mal Formado", palavra);
+                        Token token = new Token("Operador Lógico Mal Formado", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -339,7 +350,7 @@ public class Comparacao {
                 }
             } else {//má formação de operador.
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadore Lógico Mal Formado", palavra);
+                Token token = new Token("Operador Lógico Mal Formado", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -351,6 +362,7 @@ public class Comparacao {
 //_________________________________________________________________________________________________________________     
     public int verificaDelimitadorComentarioLinha(int j, char[] caractere, int linha, List<Token> tokens) {
         int J = j;
+        int aux = J + 1;
         boolean encontrou = false;
         String palavra = "";
         if (caractere[J] == '/') {
@@ -360,78 +372,96 @@ public class Comparacao {
                 palavra = palavra + caractere[J];
                 J = J + 1;
                 while (J < caractere.length) {
-                    if (caractere[J] == '\n') {
-                        palavra = palavra + caractere[J];
-                        encontrou = true;
-                        J = J + 1;
-                        break;
-                    } else {
-                        palavra = palavra + caractere[J];
-                        J++;
-                    }
+                    palavra = palavra + caractere[J];
+                    J++;
                 }
             }
         }
-        palavra = palavra + caractere[J];
+        //System.out.println(palavra);
         Token token = new Token("Comentário de Linha", palavra);
         token.setLinha(linha + 1);
         tokens.add(token);
+        J = J + 1;
         return J;
     }
 
+    /*  if (caractere[J] == '\\' && caractere[aux] == 'n') {
+     palavra = palavra + caractere[J];
+     System.out.println(palavra);
+     encontrou = true;
+     J = J + 1;
+     break;
+     } else if (caractere[J] == ' ') {
+     palavra = palavra + caractere[J];
+     J++;
+                        
+     } else {
+     palavra = palavra + caractere[J];
+     J++;
+     }
+     }
+     }
+     }
+     if (encontrou == true) {
+     palavra = palavra + caractere[J];
+     //System.out.println(palavra);
+     Token token = new Token("Comentário de Linha", palavra);
+     token.setLinha(linha + 1);
+     tokens.add(token);
+     J = J + 1;
+     }
+     return J;
+     }*/
 //_________________________________________________________________________________________________________________     
     public int[] verificaDelimitadorComentarioBloco(String[] Linhas, int linha, char[] caractere, int j, List<Token> tokens, String comentario, int x) {
         int J = j;
-        int[] p = {linha,j};
-        if(linha>=Linhas.length){
-            p[0] = linha-1;
+        int[] p = {linha, j};
+        if (linha >= Linhas.length) {
+            p[0] = linha - 1;
             p[1] = Linhas[p[0]].length();
             Token token = new Token("Comentário de Bloco Não Fechado", comentario);
-            token.setLinha(linha-1);
+            token.setLinha(linha - 1);
             tokens.add(token);
-            return p;      
+            return p;
         }
-        
-        boolean encontrou=false;   
-        while(J < caractere.length){
-            
-            if(caractere[J] == '*'){
-                comentario = comentario+caractere[J];
+
+        boolean encontrou = false;
+        while (J < caractere.length) {
+            if (caractere[J] == '*') {
+                comentario = comentario + caractere[J];
                 J++;
-                if(J < caractere.length && caractere[J] == '/'){
-                    comentario = comentario+caractere[J];
+                if (J < caractere.length && caractere[J] == '/') {
+                    comentario = comentario + caractere[J];
                     encontrou = true;
                     p[0] = J;
                     p[1] = j;
                     break;
-                }   
-            }
-            else{
-                comentario = comentario+caractere[J];
+                }
+            } else {
+                comentario = comentario + caractere[J];
                 J++;
             }
         }
-        
-        if(!encontrou){
-            j=0;
-            if (linha+1>=Linhas.length) {
+        if (!encontrou) {
+            j = 0;
+            if (linha + 1 >= Linhas.length) {
                 p[0] = linha;
                 p[1] = Linhas[p[0]].length();
                 Token token = new Token("Comentário de Bloco Não Fechado", comentario);
                 token.setLinha(linha);
                 tokens.add(token);
                 return p;
-                
             }
-            caractere =Linhas[linha+1].toCharArray();
-            p = verificaDelimitadorComentarioBloco(Linhas, linha+1, caractere, j, tokens, comentario+" ", x);
-        }else{
-        p[0] = linha;
-        p[1] = J+1;
-        Token token = new Token("Comentário de Bloco", comentario);
-        token.setLinha(x + 1);
-        tokens.add(token);
-        }     
+            caractere = Linhas[linha + 1].toCharArray();
+            p = verificaDelimitadorComentarioBloco(Linhas, linha + 1, caractere, j, tokens, comentario + " ", x);
+        } else {
+            p[0] = linha;
+            p[1] = J + 1;
+            Token token = new Token("Comentário de Bloco", comentario);
+            //System.out.println(comentario);
+            token.setLinha(x + 1);
+            tokens.add(token);
+        }
         return p;
     }
 //_________________________________________________________________________________________________________________     
@@ -512,6 +542,7 @@ public class Comparacao {
         int J = j;
         if (delimitadores.contains(caractere[J] + "")) {
             palavra = palavra + caractere[J];
+            //System.out.println(palavra);
             Token token = new Token("Delimitadores", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
@@ -524,6 +555,7 @@ public class Comparacao {
     public int verificarCadeiaCaracteres(int j, char[] caractere, List<String> letras, List<String> digitos, List<String> simbolos, int linha, List<Token> tokens) {
         String palavra = "";
         int J = j;
+        //System.out.println(caractere[j]);
         boolean encontrou = false;
 
         if (caractere[J] == '"') {
@@ -535,39 +567,39 @@ public class Comparacao {
                 while (J < caractere.length) {
                     if (caractere[J] == '"') {
                         palavra = palavra + caractere[J];
+                         //System.out.println(palavra);
                         encontrou = true;
                         J = J + 1;
                         break;
                     } else if (letras.contains(caractere[J]) || digitos.contains(caractere[J]) || simbolos.contains(caractere[J]) || caractere[J] == '\"') {
                         palavra = palavra + caractere[J];
-                        J++;
+                        J = J + 1;
                     } else {
-                        palavra = palavra + caractere[J];
+                        palavra = palavra + caractere[J]; //se não tem nenhum dos símbolos aceitos e não fechou "
+                        //System.out.println(palavra);
                         Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
-                        return J;
+                        return J+1;
                     }
                 }
             } else {
-                palavra = palavra + caractere[J];
+                palavra = palavra + caractere[J];//se após as " não tem uma letra.
+                //System.out.println(palavra);
                 Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
-                return J;
+                return J+1;
             }
-            if (encontrou != true) { //se não fechou as "
+            if (encontrou == true) {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
+                //System.out.println(palavra);
+                Token token = new Token("Cadeia de Caracteres", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
-                return J;
+                return J+1;
             }
         }
-        palavra = palavra + caractere[J];
-        Token token = new Token("Cadeia de Caracteres", palavra);
-        token.setLinha(linha + 1);
-        tokens.add(token);
         return J;
     }
 
@@ -583,12 +615,14 @@ public class Comparacao {
                 J = J + 1;
                 if (caractere[J] == '\'') {
                     palavra = palavra + caractere[J];
+                    //System.out.println(palavra);
                     Token token = new Token("Caracteres", palavra);
                     token.setLinha(linha + 1);
                     tokens.add(token);
                     J = J + 1;
                 } else {
                     palavra = palavra + caractere[J];
+                    //System.out.println(palavra);
                     Token token = new Token("Caractere Mal Formado", palavra);
                     token.setLinha(linha + 1);
                     tokens.add(token);
@@ -596,6 +630,7 @@ public class Comparacao {
                 }
             } else {
                 palavra = palavra + caractere[J];
+                //System.out.println(palavra);
                 Token token = new Token("Caractere Mal Formado", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);

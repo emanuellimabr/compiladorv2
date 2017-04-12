@@ -80,20 +80,20 @@ public class Leitura {
                     int aux = j;
                     j = comparacao.verificarPalavraReservada(j, caractere, letras, palavrasReservadas, i, tokens);
                     if (aux == j) {
-                        j = comparacao.verificarIdentificador(j, caractere, letras, digitos, i, tokens);
+                        j = comparacao.verificarIdentificador(j, caractere, letras, delimitadores, digitos, i, tokens);
                     }
                 } else if (digitos.contains("" + caractere[j])) { //Verifica se é um número
-                    j = comparacao.verificarNumero(j, caractere, digitos, i, tokens);
+                    j = comparacao.verificarNumero(j, caractere, digitos, delimitadores, i, tokens);
                 } else if (caractere[j] == '-') { //Verifica se é um número ou um operador aritmético
                     int aux2 = j;
-                    j = comparacao.verificarNumero(j, caractere, digitos, i, tokens);
+                    j = comparacao.verificarNumero(j, caractere, digitos, delimitadores, i, tokens);
                     if (aux2 == j) {
-                        j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, tokens);
+                        j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, operadoresAritmeticos, tokens);
                     }
                 } else if (operadoresAritmeticos.contains("" + caractere[j])) {//verifica se é operador aritmético ou comentário
                     if (caractere[j] == '/') {
                         int aux3 = j;
-                        j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, tokens);
+                        j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, operadoresAritmeticos, tokens);
                         if (aux3 == j) {
                             int verif = j + 1;
                             if (caractere[verif] == '/') {
@@ -103,15 +103,14 @@ public class Leitura {
                                 int[] p = comparacao.verificaDelimitadorComentarioBloco(linha, i, caractere, j, tokens, entrada, j);
                                 i = p[0];
                                 j = p[1];
-                                System.out.println(p[0] + "Linha " + p[1] + "Posicao j");
+                                //System.out.println(p[0] + "Linha " + p[1] + "Posicao j");
                                 caractere = linha[i].toCharArray();
                             }
-
-                        } else {
-                            j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, tokens);
                         }
+                    } else {
+                        j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, operadoresAritmeticos, tokens);
                     }
-                } else if (operadoresRelacionais.contains("" + caractere[j])) {//Verifica se é operador relacional ou lógico (!)
+                } else if (caractere[j] == '!' || caractere[j] == '=' || caractere[j] == '<' || caractere[j] == '>') {//Verifica se é operador relacional ou lógico (!)
                     if (caractere[j] == '!') {
                         int aux4 = j;
                         j = comparacao.verificarOperadoresRelacionais(j, caractere, i, tokens);
@@ -121,16 +120,26 @@ public class Leitura {
                     } else {
                         j = comparacao.verificarOperadoresRelacionais(j, caractere, i, tokens);
                     }
-                } else if (operadoresLogicos.contains("" + caractere[j])) {
+                } else if (caractere[j] == '&' || caractere[j]=='|') {
                     j = comparacao.verificarOperadoresLogicos(j, caractere, operadoresLogicos, i, tokens);
                 } else if (delimitadores.contains("" + caractere[j])) {
                     j = comparacao.verificarDelimitadores(j, caractere, i, delimitadores, tokens);
                 } else if (caractere[j] == '"') {
+                   // System.out.println(caractere[j]);
                     j = comparacao.verificarCadeiaCaracteres(j, caractere, letras, digitos, simbolos, i, tokens);
                 } else if (caractere[j] == '\'') {
                     j = comparacao.verificarCaractere(j, caractere, i, letras, digitos, tokens);
+                } else if (caractere[j] == ' ') {
+                    int temp2 = j;
+                    while (temp2 < caractere.length) {
+                        if (caractere[temp2] == ' ') {
+                            temp2++;
+                        } else {
+                            j = temp2;
+                        }
+                    }
                 } else {
-                    if (caractere[j] != ' ' && caractere[j] != '\t') {
+                    if (caractere[j] != '\t') {
                         Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
                         tokens.add(token);
                         token.setLinha(i + 1);
