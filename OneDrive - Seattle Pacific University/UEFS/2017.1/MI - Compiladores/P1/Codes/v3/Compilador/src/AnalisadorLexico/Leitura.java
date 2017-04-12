@@ -3,9 +3,11 @@
  */
 package AnalisadorLexico;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,32 @@ public class Leitura {
         criarListaDelimitadores();
         criarListaSimbolos();
         verificarTokens();
+        
+        File arqSaida = new File(System.getProperty("user.dir")+ File.separator + 
+                                "saida" + File.separator + arquivo.getName()+"_saida.txt");
+        if (!arqSaida.exists()) {
+            arqSaida.createNewFile();
+        }
+        FileWriter fw = new FileWriter(arqSaida);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.append("\n\n --- LISTA DE TOKENS ---\n");
+        bw.newLine();
+        
+        for(Token token : tokens){
+            System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
+            System.out.println("Working Directory = " +
+              System.getProperty("user.dir"));
+            bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
+            bw.newLine();
+        }
+        bw.newLine();
+        bw.newLine();
+        bw.append("---  ANALISE LEXICA CONCLUIDA  ---");
+        bw.newLine();
+        bw.close();
+        fw.close();
+        System.out.println("\n");
     }
 
     /* --------------------------------------------------------------------------------------------
