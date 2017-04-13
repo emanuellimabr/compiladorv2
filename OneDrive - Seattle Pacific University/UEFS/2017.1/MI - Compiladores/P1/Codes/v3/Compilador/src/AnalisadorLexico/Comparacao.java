@@ -19,7 +19,9 @@ public class Comparacao {
             if (letras.contains(caractere[J] + "")) {
                 palavra = palavra + caractere[J];
                 J++;
-            } else {
+            } else if(caractere[J] == ' '){
+                break;
+            }else {
                 break;
             }
         }
@@ -48,10 +50,11 @@ public class Comparacao {
                     palavra = palavra + caractere[J];
                     J++;
                     //System.out.println(palavra);
-                } else if (caractere[J] == ' ' ) {
+                } else if (caractere[J] == ' ' || delimitadores.contains(caractere[J]+"")) {
                     break;
                 } else {
                     palavra = palavra + caractere[J];
+                    //System.out.println(palavra);
                     erro = true;
                     break; //erro de identificador mal formado
                 }
@@ -87,7 +90,7 @@ public class Comparacao {
                 } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                     palavra = palavra + caractere[J];
                     J++;
-                } else if (caractere[J] == ' ') {
+                } else if (caractere[J] == ' ' || delimitadores.contains(caractere[J]+"")) {
                     break;
                 } else {
                     palavra = palavra + caractere[J];
@@ -112,7 +115,7 @@ public class Comparacao {
                         } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                             palavra = palavra + caractere[J];
                             J++;
-                        } else if (caractere[J] == ' ') {
+                        } else if (caractere[J] == ' ' || delimitadores.contains(caractere[J]+"")) {
                             break;
                         } else {
                             palavra = palavra + caractere[J];
@@ -152,14 +155,14 @@ public class Comparacao {
                     return j; //retorna para verificar se é comentário
                 } else {
                     //System.out.println(palavra);
-                    Token token = new Token("Operadores Aritméticos", palavra);
+                    Token token = new Token("Operador Aritmético", palavra);
                     token.setLinha(linha + 1);
                     tokens.add(token);
                     return J;
                 }
             } else {
                 //System.out.println(palavra);
-                Token token = new Token("Operadores Aritméticos", palavra);
+                Token token = new Token("Operador Aritmético", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -174,7 +177,7 @@ public class Comparacao {
         int J = j;
         if (caractere[J] == '=') {
             palavra = palavra + caractere[J];
-            Token token = new Token("Operadores Relacionais", palavra);
+            Token token = new Token("Operador Relacional", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
             J = J + 1;
@@ -183,7 +186,7 @@ public class Comparacao {
             J = J + 1;
             if (caractere[J] == '=') {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadores Relacionais", palavra);
+                Token token = new Token("Operador Relacional", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -193,7 +196,7 @@ public class Comparacao {
                         J++;
                     } else if (caractere[J] == '=') {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadores Relacionais", palavra);
+                        Token token = new Token("Operador Relacional", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -210,7 +213,7 @@ public class Comparacao {
             J = J + 1;
             if (caractere[J] == '=') {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadores Relacionais", palavra);
+                Token token = new Token("Operador Relacional", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -220,12 +223,12 @@ public class Comparacao {
                         J++;
                     } else if (caractere[J] == '=') {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadores Relacionais", palavra);
+                        Token token = new Token("Operador Relacional", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
                     } else {
-                        Token token = new Token("Operadores Relacionais", palavra);
+                        Token token = new Token("Operador Relacional", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -233,7 +236,7 @@ public class Comparacao {
                     }
                 }
             } else {
-                Token token = new Token("Operadores Relacionais", palavra);
+                Token token = new Token("Operador Relacional", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -243,7 +246,7 @@ public class Comparacao {
             J = J + 1;
             if (caractere[J] == '=') {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadores Relacionais", palavra);
+                Token token = new Token("Operador Relacional", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -253,12 +256,12 @@ public class Comparacao {
                         J++;
                     } else if (caractere[J] == '=') {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadores Relacionais", palavra);
+                        Token token = new Token("Operador Relacional", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
                     } else {
-                        Token token = new Token("Operadores Relacionais", palavra);
+                        Token token = new Token("Operador Relacional", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -266,7 +269,7 @@ public class Comparacao {
                     }
                 }
             } else {
-                Token token = new Token("Operadores Relacionais", palavra);
+                Token token = new Token("Operador Relacional", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -281,7 +284,7 @@ public class Comparacao {
         int J = j;
         if (caractere[J] == '!') {
             palavra = palavra + caractere[J];
-            Token token = new Token("Operadores Lógicos", palavra);
+            Token token = new Token("Operador Lógico", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
             J = J + 1;
@@ -290,7 +293,7 @@ public class Comparacao {
             J = J + 1;
             if (caractere[J] == '&') {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadores Lógicos", palavra);
+                Token token = new Token("Operador Lógico", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -300,7 +303,7 @@ public class Comparacao {
                         J++;
                     } else if (caractere[J] == '&') {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadores Lógicos", palavra);
+                        Token token = new Token("Operador Lógico", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -325,7 +328,7 @@ public class Comparacao {
             J = J + 1;
             if (caractere[J] == '|') {
                 palavra = palavra + caractere[J];
-                Token token = new Token("Operadores Lógicos", palavra);
+                Token token = new Token("Operador Lógico", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
                 J = J + 1;
@@ -335,7 +338,7 @@ public class Comparacao {
                         J++;
                     } else if (caractere[J] == '|') {
                         palavra = palavra + caractere[J];
-                        Token token = new Token("Operadores Lógicos", palavra);
+                        Token token = new Token("Operador Lógico", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
                         J = J + 1;
@@ -543,7 +546,7 @@ public class Comparacao {
         if (delimitadores.contains(caractere[J] + "")) {
             palavra = palavra + caractere[J];
             //System.out.println(palavra);
-            Token token = new Token("Delimitadores", palavra);
+            Token token = new Token("Delimitador", palavra);
             token.setLinha(linha + 1);
             tokens.add(token);
             return J + 1;
@@ -616,7 +619,7 @@ public class Comparacao {
                 if (caractere[J] == '\'') {
                     palavra = palavra + caractere[J];
                     //System.out.println(palavra);
-                    Token token = new Token("Caracteres", palavra);
+                    Token token = new Token("Caractere", palavra);
                     token.setLinha(linha + 1);
                     tokens.add(token);
                     J = J + 1;

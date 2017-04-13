@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,10 +39,13 @@ public class Leitura {
      */
     public void fazerLeitura(File arquivo) throws FileNotFoundException, IOException {
         tokens = new ArrayList<Token>();
-
+        comparacao = new Comparacao();
+        int i,j;
         Scanner ler;
         ler = new Scanner(new FileReader(arquivo));
         while (ler.hasNextLine()) {
+            i=0;
+            j=0;
             String linhas = ler.nextLine();
             if (!(linhas.equals(""))) {
                 entrada = entrada + linhas + "\n";
@@ -60,49 +64,23 @@ public class Leitura {
         criarListaDelimitadores();
         criarListaSimbolos();
         verificarTokens();
-        
-        File arqSaida = new File(System.getProperty("user.dir")+ File.separator + 
-                                "saida" + File.separator + arquivo.getName()+"_saida.txt");
-        if (!arqSaida.exists()) {
-            arqSaida.createNewFile();
-        }
-        FileWriter fw = new FileWriter(arqSaida);
-        BufferedWriter bw = new BufferedWriter(fw);
-        
-        bw.append("\n\n --- LISTA DE TOKENS ---\n");
-        bw.newLine();
-        
-        for(Token token : tokens){
-            System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
-            System.out.println("Working Directory = " +
-              System.getProperty("user.dir"));
-            bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
-            bw.newLine();
-        }
-        bw.newLine();
-        bw.newLine();
-        bw.append("---  ANALISE LEXICA CONCLUIDA  ---");
-        bw.newLine();
-        bw.close();
-        fw.close();
-        System.out.println("\n");
+        escreverTokens();
     }
 
     /* --------------------------------------------------------------------------------------------
      * O método abaixo realiza a verificação de cada token.
      */
     public void verificarTokens() {
-        comparacao = new Comparacao();
         char[] caractere = null;
         int i = 0;
-        int j = 0;
         String[] linha = entrada.split("\n");
         //System.out.println(linha[0]);
         while (i < linha.length) {
             caractere = linha[i].toCharArray(); //forma um arrray de caracter
+            int j = 0;
             //System.out.println(caractere[i]);
             while (j < caractere.length) {
-                //System.out.println(caractere[j]);
+               //System.out.println(caractere[j]);
 
                 if (letras.contains("" + caractere[j])) { //Verifica se é palavra reservada ou identficador
                     int aux = j;
@@ -148,12 +126,13 @@ public class Leitura {
                     } else {
                         j = comparacao.verificarOperadoresRelacionais(j, caractere, i, tokens);
                     }
-                } else if (caractere[j] == '&' || caractere[j]=='|') {
+                } else if (caractere[j] == '&' || caractere[j] == '|') {
                     j = comparacao.verificarOperadoresLogicos(j, caractere, operadoresLogicos, i, tokens);
-                } else if (delimitadores.contains("" + caractere[j])) {
+                } else if (delimitadores.contains(caractere[j]+"")) { 
+                    //System.out.println(caractere[j]);
                     j = comparacao.verificarDelimitadores(j, caractere, i, delimitadores, tokens);
                 } else if (caractere[j] == '"') {
-                   // System.out.println(caractere[j]);
+                     //System.out.println(caractere[j]);
                     j = comparacao.verificarCadeiaCaracteres(j, caractere, letras, digitos, simbolos, i, tokens);
                 } else if (caractere[j] == '\'') {
                     j = comparacao.verificarCaractere(j, caractere, i, letras, digitos, tokens);
@@ -167,15 +146,13 @@ public class Leitura {
                         }
                     }
                 } else {
-                    if (caractere[j] != '\t') {
-                        Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
-                        tokens.add(token);
-                        token.setLinha(i + 1);
-                    }
 
-                    j++;//incrementa os caracteres
-                }
-
+                    Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
+                    tokens.add(token);
+                    token.setLinha(i + 1);
+                }   
+                j++;//incrementa os caracteres
+                  //System.out.println(caractere[j]);
             }//fecha o laço do j
             i++; //incrementa as linhas
         }
@@ -326,5 +303,34 @@ public class Leitura {
         }
         //System.out.println(simbolos);
         ler.close();
+    }
+
+    //_________________________________________________________________________________________________________________    
+    public void escreverTokens() throws IOException {
+        File arqSaida = new File(System.getProperty("user.dir") + File.separator
+                + "saida" + File.separator + arquivo.getName() + "_saida.txt");
+        if (!arqSaida.exists()) {
+            arqSaida.createNewFile();
+        }
+        FileWriter fw = new FileWriter(arqSaida);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        bw.append("\n\n --- LISTA DE TOKENS ---\n");
+        bw.newLine();
+
+        for (Token token : tokens) {
+            System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
+            System.out.println("Working Directory = "
+            + System.getProperty("user.dir"));
+            bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
+            bw.newLine();
+        }
+        bw.newLine();
+        bw.newLine();
+        bw.append("---  ANALISE LEXICA CONCLUIDA  ---");
+        bw.newLine();
+        bw.close();
+        fw.close();
+        System.out.println("\n");
     }
 }

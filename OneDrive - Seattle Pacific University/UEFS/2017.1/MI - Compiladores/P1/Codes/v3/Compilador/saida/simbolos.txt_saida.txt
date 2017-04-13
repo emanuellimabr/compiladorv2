@@ -1,0 +1,23 @@
+
+
+ --- LISTA DE TOKENS ---
+
+1 exemplo Identificador
+1 teste Identificador
+2 real Palavra Reservada
+2 f Identificador
+2 = Operador Relacional
+2 3a Número Mal Formado
+3 caractere Identificador
+3 flag Identificador
+3 = Operador Relacional
+3 'te Caractere Mal Formado
+3 ste' Identificador Mal Formado
+4 se Identificador
+4 ( Delimitador
+4 f Identificador
+4 >= Operador Relacional
+4 10 Número
+
+
+---  ANALISE LEXICA CONCLUIDA  ---

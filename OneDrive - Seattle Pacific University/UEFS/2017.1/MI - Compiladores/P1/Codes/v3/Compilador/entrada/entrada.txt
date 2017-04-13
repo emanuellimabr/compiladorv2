@@ -1,1 +1,7 @@
-"a" 
+exemplo teste;
+
+real f = 3a;
+
+caractere flag = 'teste';
+
+se ( f >= 10) e 
