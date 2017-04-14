@@ -151,8 +151,8 @@ public class Leitura {
                         tokens.add(token);
                         token.setLinha(i + 1);
                     }
+                    j++;//incrementa os caracteres
                 }
-                j++;//incrementa os caracteres
             }//fecha o laço do j
             i++; //incrementa as linhas
         }
