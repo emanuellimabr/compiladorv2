@@ -13,8 +13,7 @@
 3 caractere Identificador
 3 flag Identificador
 3 = Operador Relacional
-3 'te Caractere Mal Formado
-3 este' Identificador Mal Formado
+3 'teste' Caractere Mal Formado
 3 ; Delimitador
 4 se Identificador
 4 ( Delimitador
@@ -29,8 +28,8 @@
 5 	 Não Pertence à Linguagem
 5 escreva Identificador
 5 ( Delimitador
-5 "  Cadeia de Caracteres Mal Formada
-5 mensagem Identificador
+5 "me Cadeia de Caracteres Mal Formada
+5 nsagem" Identificador Mal Formado
 5 ) Delimitador
 5 ; Delimitador
 

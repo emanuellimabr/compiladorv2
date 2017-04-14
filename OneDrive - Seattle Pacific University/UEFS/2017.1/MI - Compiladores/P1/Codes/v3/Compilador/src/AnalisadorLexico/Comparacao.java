@@ -467,77 +467,6 @@ public class Comparacao {
         }
         return p;
     }
-//_________________________________________________________________________________________________________________     
-/*    public int verificarDelimitadorCometarios(int j, char[] caractere, int linha, List<Token> tokens) {
-     int J = j;
-     boolean encontrouLinha = false;
-     boolean encontrouBloco = false;
-     String palavra = "";
-     if (caractere[J] == '/') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     if (caractere[J] == '/') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     while (J < caractere.length) {
-     if (caractere[J] == '\n') {
-     palavra = palavra + caractere[J];
-     encontrouLinha = true;
-     J = J + 1;
-     break;
-     } else {
-     palavra = palavra + caractere[J];
-     J++;
-     }
-     }
-     } else if (caractere[J] == '*') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     while (J < caractere.length) {
-     if (caractere[J] == '*') {
-     palavra = palavra + caractere[J];
-     J = J + 1;
-     if (caractere[J] == '/') {
-     palavra = palavra + caractere[J];
-     encontrouBloco = true;
-     J = J + 1;
-     break;
-     } else { // Comentário mal formado
-     palavra = palavra + caractere[J];
-     Token token = new Token("Comentário Mal Formado", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     break;
-     //preciso ver o que retorno em caso de comentário mal formado 
-     }
-     } else {
-     palavra = palavra + caractere[J];
-     J++;
-     }
-     }
-     }
-     if (encontrouLinha == true) {
-     palavra = palavra + caractere[J];
-     Token token = new Token("Comentário de Linha", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     return J;
-     }
-
-     if (encontrouBloco == true) {
-     palavra = palavra + caractere[J];
-     Token token = new Token("Comentário de Bloco", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     return J;
-     }
-     }
-     palavra = palavra + caractere[J];
-     Token token = new Token("Comentário Mal Formado", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     return J;    //preciso ver o que retorno em caso de comentário mal formado 
-     }*/
 
 //_________________________________________________________________________________________________________________    
     public int verificarDelimitadores(int j, char[] caractere, int linha, List<String> delimitadores, List<Token> tokens) {
@@ -559,7 +488,7 @@ public class Comparacao {
         //System.out.println(caractere[j]);
         boolean encontrou = false;
 
-        if (caractere[J] == '"') {
+       if (caractere[J] == '"') {
             palavra = palavra + caractere[J];
             J = J + 1;
             if (letras.contains(caractere[J] + "")) {
@@ -568,7 +497,7 @@ public class Comparacao {
                 while (J < caractere.length) {
                     if (caractere[J] == '"') {
                         palavra = palavra + caractere[J];
-                        //System.out.println(palavra);
+                         //System.out.println(palavra);
                         encontrou = true;
                         J = J + 1;
                         break;
@@ -581,7 +510,7 @@ public class Comparacao {
                         Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
                         token.setLinha(linha + 1);
                         tokens.add(token);
-                        return J + 1;
+                        return J+1;
                     }
                 }
             } else {
@@ -590,7 +519,7 @@ public class Comparacao {
                 Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
-                return J + 1;
+                return J+1;
             }
             if (encontrou == true) {
                 palavra = palavra + caractere[J];
@@ -598,7 +527,7 @@ public class Comparacao {
                 Token token = new Token("Cadeia de Caracteres", palavra);
                 token.setLinha(linha + 1);
                 tokens.add(token);
-                return J + 1;
+                return J+1;
             }
         }
         return J;
@@ -608,36 +537,35 @@ public class Comparacao {
     public int verificarCaractere(int j, char[] caractere, int linha, List<String> letras, List<String> digitos, List<Token> tokens) {
         String palavra = "";
         int J = j;
+        int tamanho = 0;
+        boolean encontrou = false;
+
         if (caractere[J] == '\'') {
             palavra = palavra + caractere[J];
             J = J + 1;
-            if (letras.contains(caractere[J] + "") || digitos.contains(caractere[J] + "") || caractere[J] == ' ') {
-                palavra = palavra + caractere[J];
-                J = J + 1;
+            while (J < caractere.length) {
                 if (caractere[J] == '\'') {
                     palavra = palavra + caractere[J];
-                    //System.out.println(palavra);
-                    Token token = new Token("Caractere", palavra);
-                    token.setLinha(linha + 1);
-                    tokens.add(token);
-                    J = J + 1;
-                } else {
+                    encontrou = true;
+                    break;
+                } else if (letras.contains(caractere[J] + "") || digitos.contains(caractere[J] + "") || caractere[J] == ' ') {
                     palavra = palavra + caractere[J];
-                    //System.out.println(palavra);
-                    Token token = new Token("Caractere Mal Formado", palavra);
-                    token.setLinha(linha + 1);
-                    tokens.add(token);
-                    return J;
+                    tamanho++;
+                } else {
+                    break;
                 }
-            } else {
-                palavra = palavra + caractere[J];
-                //System.out.println(palavra);
-                Token token = new Token("Caractere Mal Formado", palavra);
-                token.setLinha(linha + 1);
-                tokens.add(token);
-                return J;
+                J++;
             }
         }
-        return J;
+        if (tamanho > 1 || encontrou == false) {
+            Token token = new Token("Caractere Mal Formado", palavra);
+            token.setLinha(linha + 1);
+            tokens.add(token);
+            return J + 1;
+        }
+        Token token = new Token("Caractere", palavra);
+        token.setLinha(linha + 1);
+        tokens.add(token);
+        return J + 1;
     }
 }
