@@ -18,6 +18,14 @@
 4 f Identificador
 4 >= Operador Relacional
 4 10 Número
+4 e Identificador
+4 ( Delimitador
+4 < Operador Relacional
+5 	 Não Pertence à Linguagem
+5 escreva Identificador
+5 "  Cadeia de Caracteres Mal Formada
+5 ensagem Identificador
+5 ) Delimitador
 
 
 ---  ANALISE LEXICA CONCLUIDA  ---

@@ -40,12 +40,12 @@ public class Leitura {
     public void fazerLeitura(File arquivo) throws FileNotFoundException, IOException {
         tokens = new ArrayList<Token>();
         comparacao = new Comparacao();
-        int i,j;
+        int i, j;
         Scanner ler;
         ler = new Scanner(new FileReader(arquivo));
         while (ler.hasNextLine()) {
-            i=0;
-            j=0;
+            i = 0;
+            j = 0;
             String linhas = ler.nextLine();
             if (!(linhas.equals(""))) {
                 entrada = entrada + linhas + "\n";
@@ -80,7 +80,7 @@ public class Leitura {
             int j = 0;
             //System.out.println(caractere[i]);
             while (j < caractere.length) {
-               //System.out.println(caractere[j]);
+                //System.out.println(caractere[j]);
 
                 if (letras.contains("" + caractere[j])) { //Verifica se é palavra reservada ou identficador
                     int aux = j;
@@ -128,31 +128,31 @@ public class Leitura {
                     }
                 } else if (caractere[j] == '&' || caractere[j] == '|') {
                     j = comparacao.verificarOperadoresLogicos(j, caractere, operadoresLogicos, i, tokens);
-                } else if (delimitadores.contains(caractere[j]+"")) { 
+                } else if (delimitadores.contains("" + caractere[j])) {
                     //System.out.println(caractere[j]);
                     j = comparacao.verificarDelimitadores(j, caractere, i, delimitadores, tokens);
                 } else if (caractere[j] == '"') {
-                     //System.out.println(caractere[j]);
+                    //System.out.println(caractere[j]);
                     j = comparacao.verificarCadeiaCaracteres(j, caractere, letras, digitos, simbolos, i, tokens);
                 } else if (caractere[j] == '\'') {
                     j = comparacao.verificarCaractere(j, caractere, i, letras, digitos, tokens);
-                } else if (caractere[j] == ' ') {
-                    int temp2 = j;
-                    while (temp2 < caractere.length) {
-                        if (caractere[temp2] == ' ') {
-                            temp2++;
-                        } else {
-                            j = temp2;
-                        }
+                } /*else if (caractere[j] == ' ') {
+                 int temp2 = j;
+                 while (temp2 < caractere.length) {
+                 if (caractere[temp2] == ' ') {
+                 temp2++;
+                 } else {
+                 j = temp2;
+                 }
+                 }
+                 }*/ else {
+                    if (caractere[j] != ' ') {
+                        Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
+                        tokens.add(token);
+                        token.setLinha(i + 1);
                     }
-                } else {
-
-                    Token token = new Token("Não Pertence à Linguagem", caractere[j] + "");
-                    tokens.add(token);
-                    token.setLinha(i + 1);
-                }   
+                }
                 j++;//incrementa os caracteres
-                  //System.out.println(caractere[j]);
             }//fecha o laço do j
             i++; //incrementa as linhas
         }
@@ -321,7 +321,7 @@ public class Leitura {
         for (Token token : tokens) {
             System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
             System.out.println("Working Directory = "
-            + System.getProperty("user.dir"));
+                    + System.getProperty("user.dir"));
             bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
             bw.newLine();
         }

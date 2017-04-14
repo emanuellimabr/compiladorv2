@@ -4,4 +4,5 @@ real f = 3a;
 
 caractere flag = 'teste';
 
-se ( f >= 10) e 
+se ( f >= 10) e (f < ) 
+	escreva(" mensagem );
