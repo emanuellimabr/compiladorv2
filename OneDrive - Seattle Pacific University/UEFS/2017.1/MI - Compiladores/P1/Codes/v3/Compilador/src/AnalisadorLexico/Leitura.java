@@ -307,6 +307,20 @@ public class Leitura {
 
     //_________________________________________________________________________________________________________________    
     public void escreverTokens() throws IOException {
+        
+        List<String> tokenTypes  = new ArrayList<String>();
+       
+        tokenTypes.add("Identificador");
+        tokenTypes.add("Número");
+        tokenTypes.add("Palavra Reservada");
+        tokenTypes.add("Operador Relacional");
+        tokenTypes.add("Operador Logico");
+        tokenTypes.add("Operador Aritmetico");
+        tokenTypes.add("Operador Relacional");
+        tokenTypes.add("Operador Logico");
+        tokenTypes.add("Delimitador");
+        tokenTypes.add("Caractere");
+        
         File arqSaida = new File(System.getProperty("user.dir") + File.separator
                 + "saida" + File.separator + arquivo.getName() + "_saida.txt");
         if (!arqSaida.exists()) {
@@ -322,8 +336,22 @@ public class Leitura {
             System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
             System.out.println("Working Directory = "
                     + System.getProperty("user.dir"));
-            bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());
-            bw.newLine();
+            if(tokenTypes.contains(token.getId())){
+                bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());            
+                bw.newLine();
+            }
+        }
+        bw.newLine();
+        bw.newLine();
+        bw.append("---  LISTA DE ERROS ENCONTRADOS  ---");
+        bw.newLine();
+        bw.newLine();
+        for (Token token : tokens) {
+            System.out.println(token.getLinha() + " " + token.getPalavra() + " " + token.getId());           
+            if(!tokenTypes.contains(token.getId())){
+                bw.write(token.getLinha() + " " + token.getPalavra() + " " + token.getId());            
+                bw.newLine();
+            }
         }
         bw.newLine();
         bw.newLine();
