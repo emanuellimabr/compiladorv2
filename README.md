@@ -49,19 +49,19 @@ A implementação do analisador léxico para a linguagem de programação JAVA f
 
 Palavras reservadas: program, const, var, function, begin, end, if, then, else, while, do, read, write, integer, real, boolean, true, false, string, char
 
-Identificadores Letra: (Letra|Dígito|_)*
+Identificadores Letra: Letra{Letra|Dígito|_}
 
-Número: (-)?Dígito+(.Dígito+)?
+Número: [-]{ASCII 32}Digito{Digito}[.Digito{Digito}}
 
 Letra: (a..z|A..Z)
 
 Dígito: 0..9
 
-Símbolo ASCII: de 33 a 126
+Símbolo ASCII: de 32 a 126 (exceto ASCII 34)
 
-Cadeia Constante: "(Letra|Dígito|Símbolo (exceto 34))*"
+Cadeia Caracteres: "Letra{Letra|Dígito|Símbolo|\”}
 
-Caractere Constante: '(Letra|Dígito)'
+Caractere: '[Letra|Dígito|ASCII 32]'
 
 Operadores Aritméticos: + - * / %
 
@@ -71,9 +71,9 @@ Operadores Lógicos: ! && ||
 
 Delimitadores: ; , ( ) []
 
-Comentários de Linha: /* Isto é um comentário de bloco */''
+Comentários de Linha: /* Isto é um comentário de bloco */
 
-Comentários de Bloco: // Isto é um comentário de linha```
+Comentários de Bloco: // Isto é um comentário de linha
 
 A execução do analisador léxico resulta no arquivo simbolos.txt na pasta saída, o arquivo que contém em cada linha um token representando os padrões analisados.
 
