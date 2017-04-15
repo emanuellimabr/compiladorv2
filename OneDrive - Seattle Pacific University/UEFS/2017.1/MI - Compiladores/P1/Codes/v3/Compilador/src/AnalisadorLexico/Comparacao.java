@@ -388,33 +388,6 @@ public class Comparacao {
         return J;
     }
 
-    /*  if (caractere[J] == '\\' && caractere[aux] == 'n') {
-     palavra = palavra + caractere[J];
-     System.out.println(palavra);
-     encontrou = true;
-     J = J + 1;
-     break;
-     } else if (caractere[J] == ' ') {
-     palavra = palavra + caractere[J];
-     J++;
-                        
-     } else {
-     palavra = palavra + caractere[J];
-     J++;
-     }
-     }
-     }
-     }
-     if (encontrou == true) {
-     palavra = palavra + caractere[J];
-     //System.out.println(palavra);
-     Token token = new Token("Comentário de Linha", palavra);
-     token.setLinha(linha + 1);
-     tokens.add(token);
-     J = J + 1;
-     }
-     return J;
-     }*/
 //_________________________________________________________________________________________________________________     
     public int[] verificaDelimitadorComentarioBloco(String[] Linhas, int linha, char[] caractere, int j, List<Token> tokens, String comentario, int x) {
         int J = j;
@@ -472,64 +445,51 @@ public class Comparacao {
     public int verificarDelimitadores(int j, char[] caractere, int linha, List<String> delimitadores, List<Token> tokens) {
         String palavra = "";
         int J = j;
-        palavra = caractere[j] + "";
+        palavra = caractere[J] + "";
         //System.out.println(palavra);
         Token token = new Token("Delimitador", palavra);
         token.setLinha(linha + 1);
         tokens.add(token);
-        return j + 1;
+        return J + 1;
 
     }
 
 //_________________________________________________________________________________________________________________    
-    public int verificarCadeiaCaracteres(int j, char[] caractere, List<String> letras, List<String> digitos, List<String> simbolos, int linha, List<Token> tokens) {
+    public int verificarCadeiaCaracteres(int j, char[] caractere, List<String> letras, List<String> digitos, List<String> simbolos, int linha, List<Token> tokens) {    
         String palavra = "";
         int J = j;
-        //System.out.println(caractere[j]);
+        int aux = J+1;
         boolean encontrou = false;
 
-       if (caractere[J] == '"') {
+        if (caractere[J] == '"') {
             palavra = palavra + caractere[J];
             J = J + 1;
-            if (letras.contains(caractere[J] + "")) {
-                palavra = palavra + caractere[J];
-                J = J + 1;
-                while (J < caractere.length) {
-                    if (caractere[J] == '"') {
-                        palavra = palavra + caractere[J];
-                         //System.out.println(palavra);
-                        encontrou = true;
-                        J = J + 1;
-                        break;
-                    } else if (letras.contains(caractere[J]) || digitos.contains(caractere[J]) || simbolos.contains(caractere[J]) || caractere[J] == '\"') {
-                        palavra = palavra + caractere[J];
-                        J = J + 1;
-                    } else {
-                        palavra = palavra + caractere[J]; //se não tem nenhum dos símbolos aceitos e não fechou "
-                        //System.out.println(palavra);
-                        Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
-                        token.setLinha(linha + 1);
-                        tokens.add(token);
-                        return J+1;
-                    }
+            while (J < caractere.length) {
+                if (caractere[J] == '"') {
+                    palavra = palavra + caractere[J];
+                    J++;
+                    encontrou = true;
+                    break;
+                }if (letras.contains(caractere[J]+"") || digitos.contains(caractere[J]+"") || simbolos.contains(caractere[J]+"")) {
+                    palavra = palavra + caractere[J];
+                    J++;
+                } else {
+                    break;
                 }
-            } else {
-                palavra = palavra + caractere[J];//se após as " não tem uma letra.
-                //System.out.println(palavra);
-                Token token = new Token("Cadeia de Caracteres Mal Formada", palavra);
-                token.setLinha(linha + 1);
-                tokens.add(token);
-                return J+1;
-            }
-            if (encontrou == true) {
-                palavra = palavra + caractere[J];
-                //System.out.println(palavra);
-                Token token = new Token("Cadeia de Caracteres", palavra);
-                token.setLinha(linha + 1);
-                tokens.add(token);
-                return J+1;
             }
         }
+        //System.out.println(caractere[aux]);
+        if ((!letras.contains(caractere[aux]+"")) || encontrou == false) { //Se não começa com letra ou não fecha "
+            //System.out.println(palavra);
+            Token token = new Token("Cadeia de Caractere Mal Formada", palavra);
+            token.setLinha(linha + 1);
+            tokens.add(token);
+            return J;
+        }
+        //System.out.println(palavra);
+        Token token = new Token("Cadeia de Caractere", palavra);
+        token.setLinha(linha + 1);
+        tokens.add(token);
         return J;
     }
 
