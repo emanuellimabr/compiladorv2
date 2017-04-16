@@ -75,7 +75,7 @@ public class Comparacao {
     }
 
 //_________________________________________________________________________________________________________________    
-    public int verificarNumero(int j, char[] caractere, List<String> digitos, List<String> delimitadores, int linha, List<Token> tokens) {
+    public int verificarNumero(int j, char[] caractere, List<String> digitos, List<String> simbolos, int linha, List<Token> tokens) {
         String palavra = "";
         boolean erro = false;
         int J = j;
@@ -90,7 +90,9 @@ public class Comparacao {
                 } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                     palavra = palavra + caractere[J];
                     J++;
-                } else if (caractere[J] == ' ' || delimitadores.contains(caractere[J] + "")) {
+                } else if (simbolos.contains(caractere[J] + "")) {
+                    //System.out.println(simbolos);
+                    erro = false;
                     break;
                 } else {
                     palavra = palavra + caractere[J];
@@ -115,7 +117,8 @@ public class Comparacao {
                         } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
                             palavra = palavra + caractere[J];
                             J++;
-                        } else if (caractere[J] == ' ' || delimitadores.contains(caractere[J] + "")) {
+                        } else if (simbolos.contains(caractere[J] + "")) {
+                            erro = false;
                             break;
                         } else {
                             palavra = palavra + caractere[J];
@@ -129,6 +132,7 @@ public class Comparacao {
                 }
             }
         }
+        //System.out.println(erro);
         if (erro == true) {
             //System.out.println(palavra);
             Token token = new Token("Número Mal Formado", palavra);

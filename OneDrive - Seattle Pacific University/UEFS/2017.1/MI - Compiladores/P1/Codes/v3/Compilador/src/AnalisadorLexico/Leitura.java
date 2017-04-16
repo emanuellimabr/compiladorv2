@@ -89,10 +89,10 @@ public class Leitura {
                         j = comparacao.verificarIdentificador(j, caractere, letras, delimitadores, digitos, i, tokens);
                     }
                 } else if (digitos.contains("" + caractere[j])) { //Verifica se é um número
-                    j = comparacao.verificarNumero(j, caractere, digitos, delimitadores, i, tokens);
+                    j = comparacao.verificarNumero(j, caractere, digitos, simbolos, i, tokens);
                 } else if (caractere[j] == '-') { //Verifica se é um número ou um operador aritmético
                     int aux2 = j;
-                    j = comparacao.verificarNumero(j, caractere, digitos, delimitadores, i, tokens);
+                    j = comparacao.verificarNumero(j, caractere, digitos, simbolos, i, tokens);
                     if (aux2 == j) {
                         j = comparacao.verificarOperadoresAritmeticos(j, caractere, i, operadoresAritmeticos, tokens);
                     }
@@ -305,7 +305,8 @@ public class Leitura {
         ler.close();
     }
 
-    //_________________________________________________________________________________________________________________    
+//_________________________________________________________________________________________________________________    
+    //Método responsável por salvar a saída em arquivo.
     public void escreverTokens() throws IOException {
         
         List<String> tokenTypes  = new ArrayList<String>();
