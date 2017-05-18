@@ -79,19 +79,26 @@ public class Comparacao {
         String palavra = "";
         boolean erro = false;
         int J = j;
-        int aux = J + 1;
+        int aux = 0;
         if (digitos.contains(caractere[J] + "")) {
             palavra = palavra + caractere[J];
             J = J + 1;
             while (J < caractere.length) {
+                aux = J + 1;
                 if (digitos.contains(caractere[J] + "")) {
                     palavra = palavra + caractere[J];
                     J++;
-                } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
-                    palavra = palavra + caractere[J];
-                    J++;
+                } else if (caractere[J] == '.') {
+                    if(digitos.contains(caractere[aux] + "")){ //Verifico se após o . vem um dígito.
+                        palavra = palavra + caractere[J];
+                        J++;
+                    }
+                    else{
+                        palavra = palavra + caractere[J];
+                        erro = true;
+                        break; //Aqui é erro de número mal formado     
+                    }
                 } else if (simbolos.contains(caractere[J] + "")) {
-                    //System.out.println(simbolos);
                     erro = false;
                     break;
                 } else {
@@ -111,12 +118,20 @@ public class Comparacao {
                     palavra = palavra + caractere[J];
                     J = J + 1;
                     while (J < caractere.length) {
+                        aux = J + 1;
                         if (digitos.contains(caractere[J] + "")) {
                             palavra = palavra + caractere[J];
                             J++;
-                        } else if (caractere[J] == '.' && digitos.contains(caractere[aux] + "")) {
-                            palavra = palavra + caractere[J];
-                            J++;
+                        } else if (caractere[J] == '.') {
+                            if(digitos.contains(caractere[aux] + "")){ //Verifico se após o . vem um dígito.
+                                palavra = palavra + caractere[J];
+                                J++;
+                            }
+                            else{
+                                palavra = palavra + caractere[J];
+                                erro = true;
+                                break; //Aqui é erro de número mal formado     
+                            }
                         } else if (simbolos.contains(caractere[J] + "")) {
                             erro = false;
                             break;
@@ -404,7 +419,6 @@ public class Comparacao {
             tokens.add(token);
             return p;
         }
-
         boolean encontrou = false;
         while (J < caractere.length) {
             if (caractere[J] == '*') {
@@ -474,7 +488,7 @@ public class Comparacao {
                     J++;
                     encontrou = true;
                     break;
-                }if (letras.contains(caractere[J]+"") || digitos.contains(caractere[J]+"") || simbolos.contains(caractere[J]+"")) {
+                }if (letras.contains(caractere[J]+"") || digitos.contains(caractere[J]+"") || simbolos.contains(caractere[J]+"") || caractere[J] == '\"') {
                     palavra = palavra + caractere[J];
                     J++;
                 } else {

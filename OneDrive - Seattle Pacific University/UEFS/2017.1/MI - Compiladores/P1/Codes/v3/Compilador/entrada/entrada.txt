@@ -1,9 +1,1 @@
-exemplo teste;
-            
-real f = 3a;
-           
-caractere flag = 'teste';
- 
-se ( f >= 10) e (f < ) 
-	escreva(" mensagem );
-1-1
+12--12

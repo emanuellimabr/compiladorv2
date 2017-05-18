@@ -315,10 +315,10 @@ public class Leitura {
         tokenTypes.add("Número");
         tokenTypes.add("Palavra Reservada");
         tokenTypes.add("Operador Relacional");
-        tokenTypes.add("Operador Logico");
+        tokenTypes.add("Operador Lógico");
         tokenTypes.add("Operador Aritmetico");
         tokenTypes.add("Operador Relacional");
-        tokenTypes.add("Operador Logico");
+        //tokenTypes.add("Operador Lógico");
         tokenTypes.add("Delimitador");
         tokenTypes.add("Caractere");
         

@@ -2,39 +2,13 @@
 
  --- LISTA DE TOKENS ---
 
-1 exemplo Identificador
-1 teste Identificador
-1 ; Delimitador
-3 real Palavra Reservada
-3 f Identificador
-3 = Operador Relacional
-3 ; Delimitador
-5 caractere Identificador
-5 flag Identificador
-5 = Operador Relacional
-5 ; Delimitador
-7 se Identificador
-7 ( Delimitador
-7 f Identificador
-7 >= Operador Relacional
-7 10 Número
-7 ) Delimitador
-7 e Identificador
-7 ( Delimitador
-7 f Identificador
-7 < Operador Relacional
-8 escreva Identificador
-8 ( Delimitador
-9 1 Número
-9 -1 Número
+1 12 Número
+1 -12 Número
 
 
 ---  LISTA DE ERROS ENCONTRADOS  ---
 
-3 3a Número Mal Formado
-5 'teste' Caractere Mal Formado
-8 	 Não Pertence à Linguagem
-8 " mensagem ); Cadeia de Caractere Mal Formada
+1  Operador Aritmético
 
 
 ---  ANALISE LEXICA CONCLUIDA  ---
